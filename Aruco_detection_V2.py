@@ -179,13 +179,13 @@ def main():
         if key == ord('p'):
             if not p_key_was_down:
                 if centerCorner is not None and h is not None and w is not None:
-                    x_coordinate=int((centerCorner[0][1]/h)*600)-300
-                    y_coordinate=int((centerCorner[0][0]/w)*300)
+                    x_coordinate=int((centerCorner[0][0]/w)*600)-300
+                    y_coordinate=int((centerCorner[0][1]/h)*300)
                     print("Optical position: ",x_coordinate,", ",y_coordinate)
                     #camera compensation
-                    x_coordinate_comp,y_coordinate_comp=braccio_control_python.camera_compensation(x_coordinate,y_coordinate)
-                    print("Position after compensation: ",x_coordinate_comp,", ",y_coordinate_comp)
-                    braccio_control_python.pick_up(x_coordinate_comp,y_coordinate_comp)
+                    #x_coordinate_comp,y_coordinate_comp=braccio_control_python.camera_compensation(x_coordinate,y_coordinate)
+                    #print("Position after compensation: ",x_coordinate_comp,", ",y_coordinate_comp)
+                    braccio_control_python.pick_up(x_coordinate,y_coordinate)
                     print("Foam placed!")
             p_key_was_down = True
         else:
