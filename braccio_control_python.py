@@ -40,7 +40,7 @@ time.sleep(2)
 
 def write_arduino(angles):
     angles[0] = 180 - angles[0]  # invert degrees for base original code
-    #angles[1] = 180 - angles[1]  # invert degrees for shoulder added code
+    angles[1] = 180 - angles[1]  # invert degrees for shoulder added code
     #angles[3] = 180 - angles[3]  # invert degrees for base original code
     angle_string = ','.join([str(elem) for elem in angles])  # join the list values togheter
     angle_string = "P" + angle_string + ",200\n"

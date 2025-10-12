@@ -6,7 +6,6 @@ import cv2 # Import the OpenCV library
 import numpy as np # Import Numpy library
 from ArucoDetection_definitions import *
 import braccio_control_python #control braccio
-#import keyboard
 
 start_time = time.time()
  
@@ -63,6 +62,8 @@ marker_location_hold=True
 
 def main():
     centerCorner = None
+    h, w = None, None
+    p_key_was_down = False
    
     # Load the ArUco dictionary
     print("[INFO] detecting '{}' markers...".format(desired_aruco_dictionary1))
@@ -165,27 +166,30 @@ def main():
         
         # Display the resulting frame
         cv2.imshow('frame_with_square',frame_with_square)
-        #cv2.imshow('img_cropped',img_cropped)    
+        #cv2.imshow('img_cropped',img_cropped)
+
+        key = cv2.waitKey(1) & 0xFF
         # If "q" is pressed on the keyboard, 
         # exit this loop
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        if key == ord('q'):
             braccio_control_python.arm.write(b'H0,90,20,90,90,73,20\n') 
             break
-            
         
-        # #pick up piece of foam    
-        # if keyboard.is_pressed('p'):
-            
-        #     x_coordinate=int((centerCorner[0][1]/h)*600)-300
-        #     y_coordinate=int((centerCorner[0][0]/w)*300)
-        #     print("Optical position: ",x_coordinate,", ",y_coordinate)
-        #     # print(x_coordinate,y_coordinate)
-        #     #camera compensation
-        #     x_coordinate_comp,y_coordinate_comp=braccio_control_python.camera_compensation(x_coordinate,y_coordinate)
-        #     print("Position after compensation: ",x_coordinate_comp,", ",y_coordinate_comp)
-        #     # print(x_coordinate_comp,y_coordinate_comp)
-        #     braccio_control_python.pick_up(x_coordinate,y_coordinate)
-        #     print("Foam placed!")
+        # If "p" is pressed, pick up the foam
+        if key == ord('p'):
+            if not p_key_was_down:
+                if centerCorner is not None and h is not None and w is not None:
+                    x_coordinate=int((centerCorner[0][1]/h)*600)-300
+                    y_coordinate=int((centerCorner[0][0]/w)*300)
+                    print("Optical position: ",x_coordinate,", ",y_coordinate)
+                    #camera compensation
+                    x_coordinate_comp,y_coordinate_comp=braccio_control_python.camera_compensation(x_coordinate,y_coordinate)
+                    print("Position after compensation: ",x_coordinate_comp,", ",y_coordinate_comp)
+                    braccio_control_python.pick_up(x_coordinate_comp,y_coordinate_comp)
+                    print("Foam placed!")
+            p_key_was_down = True
+        else:
+            p_key_was_down = False
             
     # Close down the video stream
     cap.release()
