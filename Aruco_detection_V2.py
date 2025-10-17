@@ -179,7 +179,7 @@ def main():
         if key == ord('p'):
             if not p_key_was_down:
                 if centerCorner is not None and h is not None and w is not None:
-                    x_coordinate=int((centerCorner[0][0]/w)*600)-300
+                    x_coordinate=-(int((centerCorner[0][0]/w)*600)-300)
                     y_coordinate=int((centerCorner[0][1]/h)*300)
                     print("Optical position: ",x_coordinate,", ",y_coordinate)
                     #camera compensation

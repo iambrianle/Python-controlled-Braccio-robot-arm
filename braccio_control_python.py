@@ -204,4 +204,4 @@ def camera_compensation(x_coordinate, y_coordinate):
 
     return int(x_compensated), int(y_compensated)
 
-go_to_coordinate(200, 200, 10)
+# go_to_coordinate(200, 200, 10)
