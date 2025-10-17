@@ -109,7 +109,12 @@ def write_position(theta_base=base[0], theta_shoulder=shoulder[0], theta_elbow=e
 
 
 def go_to_coordinate(x, y, z, grip_position="closed"):
-    theta_list = solverNNA.move_to_position_cart(x, y, z)
+    # Rotate the target coordinates by -10 degrees
+    angle_rad = np.deg2rad(-10)
+    x_rot = x * np.cos(angle_rad) - y * np.sin(angle_rad)
+    y_rot = x * np.sin(angle_rad) + y * np.cos(angle_rad)
+
+    theta_list = solverNNA.move_to_position_cart(x_rot, y_rot, z)
     print(theta_list)
     write_position(theta_list[0], theta_list[1], theta_list[2], theta_list[3], grip=grip_position)
 
@@ -162,7 +167,7 @@ def pick_up(x, y):
     open_gripper()
     time.sleep(delay)
     print('pick-up foam')
-    go_to_coordinate(x, y, pick_up_heigth - 25, "open")
+    go_to_coordinate(x, y, pick_up_heigth, "open")
     time.sleep(delay)
     close_gripper()
     time.sleep(delay)
