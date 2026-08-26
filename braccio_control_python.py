@@ -21,6 +21,7 @@ Created on Mon Oct  9 15:24:13 2023
 import serial
 import time
 import numpy as np
+import os
 import solverNNA
 
 
@@ -31,16 +32,20 @@ wrist = [0, 0, 180, 3]
 wristRot = [90, 0, 180, 4]
 gripper = [73, 73, 0, 5]
 
-arm = serial.Serial('/dev/cu.usbmodem1301', 115200, timeout=5)
-print("Initializing arm") 
+SERIAL_PORT = os.environ.get("BRACCIO_SERIAL_PORT", "/dev/cu.usbmodem101")
+HOME_BASE_ANGLE = int(os.environ.get("BRACCIO_HOME_BASE_ANGLE", "45"))
+TABLE_ROTATION_DEGREES = float(os.environ.get("BRACCIO_TABLE_ROTATION_DEGREES", "-45"))
+
+arm = serial.Serial(SERIAL_PORT, 115200, timeout=5)
+print(f"Initializing arm on {SERIAL_PORT}") 
 time.sleep(2)
-arm.write(b'H0,90,20,90,90,73,20\n')  #home the arm at low speeds
+arm.write(f"P{HOME_BASE_ANGLE},90,90,90,90,73,20\n".encode())  #home the arm at low speeds
 time.sleep(2)
 
 
 def write_arduino(angles):
     angles[0] = 180 - angles[0]  # invert degrees for base original code
-    angles[1] = 180 - angles[1]  # invert degrees for shoulder added code
+    # angles[1] = 180 - angles[1]  # invert degrees for shoulder added code
     #angles[3] = 180 - angles[3]  # invert degrees for base original code
     angle_string = ','.join([str(elem) for elem in angles])  # join the list values togheter
     angle_string = "P" + angle_string + ",200\n"
@@ -65,8 +70,11 @@ def rotate_joint(joint):  # rotate a specific joint to the outer limits of the j
 
 
 def home(speed=20):
-    angle_string_def_angles = [base[0], shoulder[0], elbow[0], wrist[0], wristRot[0], gripper[0]]
-    write_arduino(angle_string_def_angles)
+    arm.write(f"P{HOME_BASE_ANGLE},90,90,90,90,73,{speed}\n".encode())
+    angle_string_def_angles = [HOME_BASE_ANGLE, 90, 90, 90, 90, gripper[0]]
+    with open("prev_teta.txt", "w") as text_file:
+        text_file.write(";".join([str(elem) for elem in angle_string_def_angles]))
+        text_file.write(";")
     print(angle_string_def_angles)
 
 
@@ -109,8 +117,8 @@ def write_position(theta_base=base[0], theta_shoulder=shoulder[0], theta_elbow=e
 
 
 def go_to_coordinate(x, y, z, grip_position="closed"):
-    # Rotate the target coordinates by -10 degrees
-    angle_rad = np.deg2rad(-10)
+    # Align camera/table coordinates with the physical base orientation.
+    angle_rad = np.deg2rad(TABLE_ROTATION_DEGREES)
     x_rot = x * np.cos(angle_rad) - y * np.sin(angle_rad)
     y_rot = x * np.sin(angle_rad) + y * np.cos(angle_rad)
 
@@ -208,5 +216,3 @@ def camera_compensation(x_coordinate, y_coordinate):
     x_compensated = offset - (x_compensated - (camera_position[0] - offset))
 
     return int(x_compensated), int(y_compensated)
-
-# go_to_coordinate(200, 200, 10)

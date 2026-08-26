@@ -2,6 +2,7 @@
 #include <Servo.h>
 #include "BraccioRobot.h"
 #define INPUT_BUFFER_SIZE 50
+#define BASE_HOME_ANGLE 90
 
 static char inputBuffer[INPUT_BUFFER_SIZE];
 Position armPosition;
@@ -9,6 +10,7 @@ Position armPosition;
 void setup() {
   Serial.begin(115200);
   BraccioRobot.init();
+  homePositionArm();
 }
 
 void loop() {
@@ -53,6 +55,6 @@ positionArm(char *in) {
 
 void
 homePositionArm() {
-  BraccioRobot.moveToPosition(armPosition.set(90, 90, 90, 90, 90, 73), 150);
+  BraccioRobot.moveToPosition(armPosition.set(BASE_HOME_ANGLE, 90, 90, 90, 90, 73), 150);
   Serial.println("OK");
 }

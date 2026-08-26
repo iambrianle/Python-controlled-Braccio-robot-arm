@@ -1,0 +1,38 @@
+{
+  "workspace_w_mm": 280.0,
+  "workspace_h_mm": 360.0,
+  "base_x_mm": 31.318864774624373,
+  "base_y_mm": 188.3354192740926,
+  "heading_deg": -4.385776840796727,
+  "base_offset_deg": -42.0,
+  "radial_compensation": 1.02,
+  "reach_at_100mm": 19.0,
+  "reach_at_300mm": 236.0,
+  "z_offset_mm": 24.0,
+  "elbow_offset_deg": 5.0,
+  "wrist_offset_deg": 5.0,
+  "base_backlash_ccw": {
+    "0": 0.0,
+    "20": 1.5,
+    "40": 3.0,
+    "60": 4.5,
+    "80": 5.0,
+    "100": 9.5,
+    "120": 12.1,
+    "140": 15.9,
+    "160": 18.7
+  },
+  "base_backlash_cw": {
+    "0": 0.0,
+    "20": 2.5,
+    "40": 3.5,
+    "60": 6.0,
+    "80": 8.0,
+    "100": 9.5,
+    "120": 13.6,
+    "140": 16.3,
+    "160": 19.8
+  },
+  "gripper_open": 15,
+  "gripper_closed": 73
+}
