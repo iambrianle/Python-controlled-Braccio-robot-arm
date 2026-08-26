@@ -1,5 +1,13 @@
-opencv-python==4.13.0.92
-numpy==2.0.2
-pyserial==3.5
-sympy==1.14.0
-mpmath==1.3.0
+# Python 3.10 or newer. Install with:
+#   python3 -m pip install -r requirements.txt
+#
+# braccio_pick.py needs opencv-python, numpy, and pyserial.
+# sympy/mpmath are used by the original solverNNA.py / braccio_control_python.py scripts.
+#
+# OpenCV 4.7+ is required (cv2.aruco.ArucoDetector).
+
+opencv-python>=4.7.0,<5
+numpy>=1.24.0
+pyserial>=3.5
+sympy>=1.12
+mpmath>=1.3.0
